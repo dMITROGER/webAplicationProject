@@ -1,0 +1,48 @@
+<h1>Emergency Alert</h1>
+
+<!-- # is variable declaration in ng -->
+<form #f='ngForm' (ngSubmit)="f.form.valid && submitAlert()" novalidate>
+
+  <!-- Full Name -->
+  <div class=" form-group row">
+    <div class="col-4 text-right ">
+      <label>Patient Name:</label>
+    </div>
+    <div class="col-md-5 ">
+      <input type="text" class="form-control " required [(ngModel)]="user.name" name="patient" readonly>
+    </div>
+  </div>
+
+  <!-- Email Address -->
+  <div class=" form-group row">
+    <div class="col-4 text-right ">
+      <label>Nurse:</label>
+    </div>
+    <div class="col-md-5 ">
+      <select class="form-control" (change)="nurseSelect($event.target.value)">
+        <option selected></option>
+        <option *ngFor="let nurse of nurses" value="{{nurse._id}}">{{nurse.name}}</option>
+      </select>
+    </div>
+  </div>
+
+  <div class=" form-group row">
+    <div class="col-4 text-right ">
+      <label for="comment">Comment:</label>
+    </div>
+    <div class="col-md-5 ">
+      <textarea class="form-control" (change)="alertText($event.target.value)" rows="5" name="comment"></textarea>
+    </div>
+  </div>
+
+  <!-- Buttons -->
+  <button type="submit " class="btn btn-danger ">
+    <i class="fa fa-user-plus "></i> Send Alert
+  </button>
+  <a routerLink="/home" class="btn btn-warning">
+    <i class="fa fa-ban "></i> Cancel</a>
+
+</form>
+<div class="col-md-5" *ngIf="sent">
+  <p style="color:green">Emergency alert was sent successfully!</p>
+</div>

@@ -1,0 +1,224 @@
+<!-- General Patient Info -->
+<h1>{{ patient?.type ==='nurse' ? 'Nurse Profile' : 'Patient Profile' }}</h1>
+
+<div class="row justify-content-center">
+  <div class="col-md-7">
+    <table class="table" align="center">
+      <tbody>
+        <tr>
+          <td>
+            <!-- ?. is a safety operator for binding properties that don't exist on first render -->
+            <b>Full Name</b>: {{ patient?.name }}</td>
+          <td style="padding-left: 40px">
+            <b>Email</b>: {{ patient?.email }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- if nurse profile only show above info -->
+<span *ngIf='this.patient?.type!=="nurse"'>
+
+  <span *ngIf='this.authService.isNurse()'>
+    <!-- Motivation sent by nurses -->
+    <!-- can add motivation if user is a nurse -->
+    <h3>Motivation you Sent to this Patient</h3>
+    <div class="row justify-content-center" *ngIf='this.authService.isNurse()'>
+      <button (click)="toggleAddMotivationForm()" class="btn btn-outline-success" [disabled]='this.showAddMotivationForm'>
+        <i class="fa fa-heart "></i> Send Motivation!</button>
+    </div>
+    <div *ngIf='this.showAddMotivationForm' style="margin-top:20px;">
+
+      <form #f='ngForm' [ngClass]="{'was-validated': f.submitted}" (ngSubmit)="f.form.valid && sendMotivation(motivationMsg, motivationType)"
+        novalidate>
+
+        <!-- Type of Motivation -->
+        <div class="form-group row">
+          <div class="col-4 text-right ">
+            <label>Type of Motivation:</label>
+          </div>
+          <div class="col-md-5">
+            <select class="form-control" required name='type' #motivationType>
+              <!-- <select class="form-control" required [(ngModel)]="createdMotivation.type" name='type'> -->
+              <option value='string'>String</option>
+              <option value='url'>Url</option>
+            </select>
+            <div class="invalid-feedback text-left">Type of Motivation is required!</div>
+          </div>
+        </div>
+
+        <!-- Message -->
+        <div class=" form-group row">
+          <div class="col-4 text-right ">
+            <label>Message:</label>
+          </div>
+          <div class="col-md-5 ">
+            <input type="text" class="form-control " required name="message" placeholder="Enter your motivational message or link" #motivationMsg>
+            <!-- <input type="text" class="form-control " required [(ngModel)]="createdMotivation.message" name="message" placeholder="Enter your motivational message or link"> -->
+            <div class="invalid-feedback text-left">A motivational message or link to a motivational video or game is required!</div>
+          </div>
+        </div>
+
+        <!-- Buttons -->
+        <button type="submit " class="btn btn-outline-success">
+          <i class="fa fa-paper-plane-o "></i> Send
+        </button>
+        <button (click)="toggleAddMotivationForm()" class="btn btn-outline-danger">Cancel</button>
+      </form>
+    </div>
+    <!-- end toggleable motivation insert form -->
+
+    <div style="margin-top: 24px;"></div>
+
+    <div class="row justify-content-center" *ngIf='!this.nurseHasMotivatedPatient'>
+      <!-- <div class="row justify-content-center" *ngIf='this.patient?.receivedMotivation.length==0'> -->
+      <p>You have not sent any motivation to this patient yet...</p>
+    </div>
+
+    <div class="row justify-content-center" *ngIf='nurseHasMotivatedPatient'>
+      <!-- <div class="row justify-content-center" *ngIf='this.patient?.receivedMotivation.length>0'> -->
+      <div class="col-md-8">
+        <table class="table" align="center">
+          <thead class='thead-dark'>
+            <tr>
+              <th scope='col'>Type</th>
+              <th scope='col'>Message</th>
+              <th scope='col'>Date Sent</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor='let receivedMotivation of this.patient?.receivedMotivation'>
+              <td>{{receivedMotivation.type}}</td>
+              <td>
+                <a href='{{receivedMotivation.message}}' *ngIf='receivedMotivation.type==="url"'>{{receivedMotivation.message}}</a>
+                <span *ngIf='receivedMotivation.type!=="url"'> {{receivedMotivation.message}}</span>
+              </td>
+              <td>{{receivedMotivation.dateRecorded | date:'medium'}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </span>
+  <!-- end motivation span -->
+
+  <!-- Recorded Vital Signs from Previous Clinical Visits -->
+  <h3>History of Vital Signs</h3>
+
+  <div class="row justify-content-center">
+    <button (click)="toggleAddVitalSignsForm()" class="btn btn-outline-success" [disabled]='this.showAddVitalSignsForm'>
+      <i class="fa fa-pencil-square-o "></i> Enter Vital Signs</button>
+  </div>
+  <div *ngIf='this.showAddVitalSignsForm' style="margin-top:20px;">
+
+    <form #f='ngForm' [ngClass]="{'was-validated': f.submitted}" (ngSubmit)="f.form.valid && enterVitalSigns()" novalidate>
+
+      <!-- body temperature -->
+      <div class="form-group row">
+        <div class="col-4 text-right ">
+          <label>Body Temperature (&deg;C):</label>
+        </div>
+        <div class="col-md-5">
+          <input type="number" step="any" min="0" class="form-control " required name="bodyTemperature" [(ngModel)]='this.createdVitalSigns.bodyTemperature'>
+          <div class="invalid-feedback text-left">Body Temperature is required!</div>
+        </div>
+      </div>
+
+      <!-- pulse rate -->
+      <div class=" form-group row">
+        <div class="col-4 text-right ">
+          <label>Pulse Rate (bpm):</label>
+        </div>
+        <div class="col-md-5">
+          <input type="number" min="0" class="form-control " required name="pulseRate" [(ngModel)]='this.createdVitalSigns.pulseRate'>
+          <div class="invalid-feedback text-left">Pulse rate is required!</div>
+        </div>
+      </div>
+
+      <!-- respiratory rate -->
+      <div class=" form-group row">
+        <div class="col-4 text-right ">
+          <label>Respiratory Rate (bpm):</label>
+        </div>
+        <div class="col-md-5">
+          <input type="number" min="0" class="form-control " required name="repirationRate" [(ngModel)]='this.createdVitalSigns.repirationRate'>
+          <div class="invalid-feedback text-left">Respiration rate is required!</div>
+        </div>
+      </div>
+
+      <!-- blood pressure -->
+      <div class=" form-group row">
+        <div class="col-4 text-right ">
+          <label>Systolic Blood Pressure:</label>
+        </div>
+        <div class="col-md-5">
+          <input type="number" class="form-control " required name="systolicBp" [(ngModel)]='this.createdVitalSigns.bloodPressure.systolic'>
+          <div class="invalid-feedback text-left">Systolic Blood Pressure is required!</div>
+        </div>
+      </div>
+      <div class=" form-group row">
+        <div class="col-4 text-right ">
+          <label>Diastolic Blood Pressure:</label>
+        </div>
+        <div class="col-md-5">
+          <input type="number" class="form-control " required name="diastolicBp" [(ngModel)]='this.createdVitalSigns.bloodPressure.diastolic'>
+          <div class="invalid-feedback text-left">Systolic Blood Pressure is required!</div>
+        </div>
+      </div>
+
+      <!-- comments -->
+      <div class=" form-group row">
+        <div class="col-4 text-right ">
+          <label>Comments:</label>
+        </div>
+        <div class="col-md-5">
+          <input type="text" class="form-control " name="comments" [(ngModel)]='this.createdVitalSigns.comments'>
+        </div>
+      </div>
+
+      <!-- Buttons -->
+      <button type="submit " class="btn btn-outline-success">
+        <i class="fa fa-pencil "></i> Submit
+      </button>
+      <button (click)="toggleAddVitalSignsForm()" class="btn btn-outline-danger">Cancel</button>
+    </form>
+  </div>
+  <!-- end toggleable motivation insert form -->
+
+  <div style="margin-top: 24px;"></div>
+
+  <div class="row justify-content-center" *ngIf='this.patient?.vitalSigns.length==0'>
+    <p>{{ this.authService.isNurse() ? 'This is a new patient.': '' }} There are currently no previous vital signs recorded...</p>
+  </div>
+
+  <div class="row justify-content-center" *ngIf='this.patient?.vitalSigns.length>0'>
+
+    <div class="col-md-12">
+      <table class="table" align="center">
+        <thead class='thead-dark'>
+          <tr>
+            <th scope='col'>Body Temperature (&deg;C)</th>
+            <th scope='col'>Pulse Rate (bpm)</th>
+            <th scope='col'>Respiratory Rate (bpm)</th>
+            <th scope='col'>Blood Pressure</th>
+            <th scope='col'>Comments</th>
+            <th scope='col'>Date Entered</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor='let vitalSigns of this.patient?.vitalSigns'>
+            <td>{{vitalSigns.bodyTemperature}}</td>
+            <td>{{vitalSigns.pulseRate}}</td>
+            <td>{{vitalSigns.repirationRate}}</td>
+            <td>{{vitalSigns.bloodPressure.systolic}}/{{vitalSigns.bloodPressure.diastolic}}</td>
+            <td>{{vitalSigns.comments !== undefined ? vitalSigns.comments:'n/a'}}</td>
+            <td>{{vitalSigns.dateRecorded | date:'medium'}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</span>

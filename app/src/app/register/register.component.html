@@ -1,0 +1,60 @@
+<h1>Register</h1>
+
+<!-- # is variable declaration in ng -->
+<form #f='ngForm' [ngClass]="{'was-validated': f.submitted}" (ngSubmit)="f.form.valid && register()" novalidate>
+
+  <!-- Full Name -->
+  <div class=" form-group row">
+    <div class="col-4 text-right ">
+      <label>Full Name:</label>
+    </div>
+    <div class="col-md-5 ">
+      <input type="text" class="form-control " required [(ngModel)]="credentials.name" name="email" placeholder="Enter your name">
+      <div class="invalid-feedback text-left">Your name is required!</div>
+    </div>
+  </div>
+
+  <!-- Email Address -->
+  <div class=" form-group row">
+    <div class="col-4 text-right ">
+      <label>Email:</label>
+    </div>
+    <div class="col-md-5 ">
+      <input type="text" class="form-control " required [(ngModel)]="credentials.email" name="email" placeholder="Enter email">
+      <div class="invalid-feedback text-left">Email is required!</div>
+    </div>
+  </div>
+
+  <!-- Password -->
+  <div class="form-group row">
+    <div class="col-4 text-right ">
+      <label>Password:</label>
+    </div>
+    <div class="col-md-5">
+      <input type="password" class="form-control " required [(ngModel)]="credentials.password" name="password" placeholder="Password"
+      />
+      <div class="invalid-feedback text-left">Password is required!</div>
+    </div>
+  </div>
+
+  <!-- Type of User -->
+  <div class="form-group row">
+    <div class="col-4 text-right ">
+      <label>Type of User:</label>
+    </div>
+    <div class="col-md-5">
+      <select class="form-control" required [(ngModel)]="credentials.type" name='type'>
+        <option value='patient'>Patient</option>
+        <option value='nurse'>Nurse</option>
+      </select>
+      <div class="invalid-feedback text-left">Type of User is required!</div>
+    </div>
+  </div>
+
+  <!-- Buttons -->
+  <button type="submit " class="btn btn-outline-success ">
+    <i class="fa fa-user-plus "></i> Register
+  </button>
+  <a routerLink="/login" class="btn btn-outline-danger">
+    <i class="fa fa-ban "></i> Cancel</a>
+</form>

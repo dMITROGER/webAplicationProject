@@ -1,0 +1,76 @@
+
+
+
+<!-- Nurse Home View -->
+
+<div class="container" *ngIf='this.authService.isNurse()'>
+    <div class="row">
+            <div class="col-md">
+
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">List of patients</h5>
+                            <br>
+                            <h6 class="card-subtitle mb-2 text-muted"></h6>
+                            <img class="mw-25" src="../../assets/patient-management.jpg" alt="">
+                            <br><br>
+                            <p class="card-text">View patient details, enter vital signs, send motivations</p>
+                            <br>
+                            <a routerLink='/patients' class="card-link btn btn-primary">Click to Continue</a>
+                        </div>
+                    </div>
+                </div>
+            <div  class="col-md">
+            <div class="card h-100">
+                <div class="card-body" >
+                    <h5 class="card-title">Alerts</h5>
+                    <br>
+                    <h6 class="card-subtitle mb-2 text-muted"></h6>
+                    <img class="mw-25" src="../../assets/emergency-alert.jpg"  alt=""> 
+                    <br><br>
+                    <p class="card-text">View patients' emergency allerts</p>
+                    <br>                  
+                    <a routerLink='/home' class="card-link btn btn-primary">Click to Continue</a>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+</div>
+<!-- end nurse home view -->
+
+
+<!-- Patient Home View -->
+<div class="container" *ngIf='!this.authService.isNurse()'>
+    <div class="row">
+        <div class="col-md">
+
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title">AI diagnosis Tool</h5><br>
+                    <h6 class="card-subtitle mb-2 text-muted"></h6>
+                    <img class="mw-25" src="../../assets/ml.png">
+                    <br><br>
+                    <p class="card-text">Our smart diagnosis tool will help you decide if you need to consult a doctor
+                    </p>
+                    <a routerLink='/symptom-checker' class="card-link btn btn-primary">Click to Continue</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title">Account information</h5><br>
+                    <h6 class="card-subtitle mb-2 text-muted"></h6>
+                    <img class="mw-25" src="../../assets/Profile-Management.jpg">
+                    <br><br>
+                    <p class="card-text">Enter your account information details</p>
+                    <br>
+                    <a routerLink='/profile' [queryParams]="{id: user._id}" class="card-link btn btn-primary">Click to
+                        Continue</a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

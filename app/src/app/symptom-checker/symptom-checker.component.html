@@ -1,0 +1,85 @@
+<!-- # is variable declaration in ng -->
+<br/>
+<h5>Check symptoms for possible medical conditions</h5>
+<br />
+<form #f='ngForm' [ngClass]="{'was-validated': f.submitted}" (ngSubmit)="f.form.valid && checksymptoms()" novalidate>
+
+  <!-- Full Name -->
+  <div class="form-group row">
+    <div class="col-4 text-right ">
+      <label>Coughing:</label>
+    </div>
+    <div class="col-md-5">
+      <select class="form-control" required [(ngModel)]="symptoms.coughing" name='type'>
+        <option value='yes'>Yes</option>
+        <option value='no'>No</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Email Address -->
+  <div class="form-group row">
+    <div class="col-4 text-right ">
+      <label>High Fever:</label>
+    </div>
+    <div class="col-md-5">
+      <select class="form-control" required [(ngModel)]="symptoms.highFever" name='type'>
+        <option value='yes'>Yes</option>
+        <option value='no'>No</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Password -->
+  <div class="form-group row">
+    <div class="col-4 text-right ">
+      <label>Sniffling:</label>
+    </div>
+    <div class="col-md-5">
+      <select class="form-control" required [(ngModel)]="symptoms.sniffling" name='type'>
+        <option value='yes'>Yes</option>
+        <option value='no'>No</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Type of User -->
+  <div class="form-group row">
+    <div class="col-4 text-right ">
+      <label>Aching:</label>
+    </div>
+    <div class="col-md-5">
+      <select class="form-control" required [(ngModel)]="symptoms.aching" name='type'>
+        <option value='yes'>Yes</option>
+        <option value='no'>No</option>>
+      </select>
+    </div>
+  </div>
+
+  <!-- Buttons -->
+  <button type="submit " class="btn btn-outline-success ">
+    <i class="fa fa-user-md "></i> Check
+  </button>
+  <a routerLink="/home" class="btn btn-outline-danger">
+    <i class="fa fa-ban "></i> Cancel</a>
+</form>
+<div *ngIf='results'>
+  <br />
+  <p>
+    <b>Possible Medical Conditions</b>
+  </p>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Condition</th>
+        <th>Require Medical Attention</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>{{ possibleCondition.condition }}</td>
+        <td>{{ possibleCondition.attn }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

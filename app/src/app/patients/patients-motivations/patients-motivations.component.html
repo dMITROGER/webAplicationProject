@@ -1,0 +1,16 @@
+<h1>Motivation Sent To Help Me</h1>
+<div class="row justify-content-center">
+  <div class="col-md-8">
+    <table class="table" align="center">
+      <tbody>
+        <tr *ngFor='let receivedMotivation of this.patient?.receivedMotivation'>
+          <td>
+            <a href='{{receivedMotivation.message}}' *ngIf='receivedMotivation.type==="url"'>{{receivedMotivation.message}}</a>
+            <span *ngIf='receivedMotivation.type!=="url"'> {{receivedMotivation.message}}</span>
+          </td>
+          <td>{{receivedMotivation.dateRecorded | date:'medium'}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
